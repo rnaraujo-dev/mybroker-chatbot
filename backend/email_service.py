@@ -1,16 +1,16 @@
-import smtplib
-from email.mime.text import MIMEText
+import os
+import json
+from urllib.request import Request, urlopen
 
 
 def send_lead_email(lead, summary):
-    sender_email = "rnaraujo20@gmail.com"
-    app_password = "jblp cgjo pxao axsk"
+    api_key = os.getenv("re_Z5rC5bgo_BL4BTtsfBAKnkCFkkEZosWaj")
 
     receiver_email = "rnaraujo20@yahoo.com"
 
     subject = "🔥 New Lead Received - My Broker Search"
 
-    # 🔥 CLEAN EMAIL BODY
+    # SAME BODY STYLE YOU HAD
     body = f"""
 🚨 HIGH INTENT LEAD - MY BROKER SEARCH
 
@@ -31,22 +31,29 @@ def send_lead_email(lead, summary):
 📋 DETAILS:
 """
 
-    # Add answers dynamically
     for key, value in lead.answers.items():
         body += f"{key}: {value}\n"
 
-    # Create message
-    msg = MIMEText(body)
-    msg["Subject"] = subject
-    msg["From"] = sender_email
-    msg["To"] = receiver_email
+    payload = {
+        "from": "My Broker Search <onboarding@resend.dev>",
+        "to": [receiver_email],
+        "subject": subject,
+        "text": body,  # using plain text (same as before)
+    }
+
+    req = Request(
+        "https://api.resend.com/emails",
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        },
+        method="POST",
+    )
 
     try:
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-            server.login(sender_email, app_password)
-            server.sendmail(sender_email, receiver_email, msg.as_string())
-
-        print("✅ Email sent successfully")
+        with urlopen(req) as response:
+            print("✅ Email sent successfully via Resend")
 
     except Exception as e:
         print("❌ Email failed:", str(e))
