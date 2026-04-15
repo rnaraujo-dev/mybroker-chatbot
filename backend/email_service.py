@@ -6,7 +6,7 @@ from urllib.request import Request, urlopen
 def send_lead_email(lead, summary):
     api_key = os.getenv("re_Z5rC5bgo_BL4BTtsfBAKnkCFkkEZosWaj")
 
-    receiver_email = "rnaraujo20@yahoo.com"
+    receiver_email = "rnaraujo20@gmail.com"
 
     subject = "🔥 New Lead Received - My Broker Search"
 
