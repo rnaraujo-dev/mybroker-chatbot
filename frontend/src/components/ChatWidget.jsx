@@ -78,7 +78,7 @@ export default function ChatWidget() {
     e.preventDefault()
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/lead", {
+      const response = await fetch("https://mybroker-chatbot.onrender.com/api/lead", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
